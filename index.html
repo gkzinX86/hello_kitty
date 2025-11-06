@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Para Você Mesma Pequena 💜</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;1,600&family=Montserrat:wght@200;300&display=swap">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to bottom, #1a0b2e 0%, #2d1b4e 50%, #4a2c6d 100%);
+      color: #f8e8ff;
+      overflow: hidden;
+      position: relative;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      touch-action: pan-y;
+    }
+
+    html {
+      height: -webkit-fill-available;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      height: -webkit-fill-available;
+      display: flex;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 2s ease, visibility 2s;
+      z-index: 2;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .slide.active .content {
+      animation: fadeInUp 1.8s ease-out both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    h1 {
+      font-family: 'Crimson Text', serif;
+      font-size: clamp(2em, 8vw, 4em);
+      font-weight: 600;
+      font-style: italic;
+      color: #e8c4ff;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 30px rgba(232, 196, 255, 0.3);
+    }
+
+    p {
+      font-size: clamp(1em, 4vw, 1.3em);
+      font-weight: 200;
+      line-height: 1.9;
+      color: #f0d9ff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .heart-float {
+      position: absolute;
+      font-size: 1.5em;
+      opacity: 0;
+      pointer-events: none;
+      animation: floatUp 4s ease-in infinite;
+      z-index: 3;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
+      z-index: 10;
+    }
+
+    button {
+      background: rgba(232, 196, 255, 0.1);
+      border: 1px solid rgba(232, 196, 255, 0.3);
+      border-radius: 50px;
+      color: #e8c4ff;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-weight: 300;
+      font-size: 0.95em;
+      letter-spacing: 1px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      touch-action: manipulation;
+    }
+
+    button:active {
+      background: rgba(232, 196, 255, 0.2);
+      transform: scale(0.95);
+    }
+
+    .hello-kitty {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: clamp(60px, 15vw, 100px);
+      opacity: 0.8;
+      animation: gentleBounce 3s ease-in-out infinite;
+      filter: drop-shadow(0 5px 15px rgba(232, 196, 255, 0.3));
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    @keyframes gentleBounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .slide-indicator {
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(232, 196, 255, 0.3);
+      transition: all 0.4s ease;
+    }
+
+    .dot.active {
+      background: #e8c4ff;
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    .interactive-heart {
+      font-size: clamp(3em, 15vw, 6em);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      margin-top: 20px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+      touch-action: manipulation;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.1);
+      }
+      50% {
+        transform: scale(1);
+      }
+    }
+
+    .interactive-heart:active {
+      transform: scale(0.9);
+    }
+
+    .click-counter {
+      margin-top: 15px;
+      font-size: clamp(0.8em, 3vw, 0.9em);
+      color: rgba(232, 196, 255, 0.6);
+      font-weight: 200;
+    }
+
+    .letter-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      height: -webkit-fill-available;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+      padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .letter-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .letter-container {
+      background: linear-gradient(135deg, #2d1b4e 0%, #4a2c6d 100%);
+      border: 2px solid rgba(232, 196, 255, 0.3);
+      border-radius: 20px;
+      padding: 40px 25px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: letterAppear 0.8s ease-out;
+      position: relative;
+      margin: auto;
+    }
+
+    @keyframes letterAppear {
+      from {
+        transform: scale(0.8) rotateX(-20deg);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) rotateX(0);
+        opacity: 1;
+      }
+    }
+
+    .letter-header {
+      font-family: 'Crimson Text', serif;
+      font-size: clamp(1.8em, 6vw, 2.5em);
+      font-style: italic;
+      color: #e8c4ff;
+      margin-bottom: 25px;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(232, 196, 255, 0.3);
+    }
+
+    .letter-content {
+      font-size: clamp(0.95em, 3.5vw, 1.1em);
+      line-height: 2;
+      color: #f0d9ff;
+      text-align: left;
+      white-space: pre-line;
+    }
+
+    .close-letter {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(232, 196, 255, 0.1);
+      border: 1px solid rgba(232, 196, 255, 0.3);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #e8c4ff;
+      font-size: 1.5em;
+      transition: all 0.3s ease;
+      touch-action: manipulation;
+    }
+
+    .close-letter:active {
+      background: rgba(232, 196, 255, 0.2);
+      transform: scale(0.9);
+    }
+
+    .music-toggle {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      background: rgba(232, 196, 255, 0.1);
+      border: 1px solid rgba(232, 196, 255, 0.3);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+      padding: 0;
+      touch-action: manipulation;
+    }
+
+    .music-toggle:active {
+      background: rgba(232, 196, 255, 0.2);
+      transform: scale(0.95);
+    }
+
+    .music-icon {
+      font-size: 1.5em;
+      animation: musicPulse 2s ease-in-out infinite;
+    }
+
+    .music-toggle.playing .music-icon {
+      animation: musicPulse 0.8s ease-in-out infinite;
+    }
+
+    .music-toggle.paused .music-icon {
+      opacity: 0.5;
+      animation: none;
+    }
+
+    @keyframes musicPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        bottom: 20px;
+        gap: 10px;
+      }
+      
+      button {
+        padding: 10px 20px;
+        font-size: 0.85em;
+      }
+
+      .slide {
+        padding: 15px;
+      }
+
+      .content {
+        padding: 0 10px;
+      }
+
+      .letter-container {
+        padding: 30px 20px;
+        max-height: 80vh;
+      }
+
+      .music-toggle {
+        width: 45px;
+        height: 45px;
+        top: 25px;
+        right: 25px;
+      }
+
+      .slide-indicator {
+        top: 25px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      .controls {
+        bottom: 15px;
+      }
+
+      .hello-kitty {
+        bottom: 15px;
+        right: 15px;
+      }
+
+      .letter-container {
+        padding: 25px 15px;
+        border-radius: 15px;
+      }
+
+      .close-letter {
+        width: 35px;
+        height: 35px;
+        font-size: 1.3em;
+      }
+    }
+
+    /* Landscape mode adjustments */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .slide {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 2em;
+        margin-bottom: 15px;
+      }
+
+      p {
+        font-size: 0.9em;
+        line-height: 1.6;
+      }
+
+      .controls {
+        bottom: 10px;
+      }
+
+      .interactive-heart {
+        font-size: 3em;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+
+  <div class="slide-indicator">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide active">
+    <div class="content">
+      <h1>Ana</h1>
+      <p>Nome breve, mas com o peso suave do eterno.
+ Há nomes que passam, e há nomes que ficam.
+O teu… repousa no pensamento como se sempre tivesse estado lá..</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide">
+    <div class="content">
+      <h1>Sua essência</h1>
+      <p>Há algo em você que não se explica, apenas se sente.
+É como tentar descrever o perfume do vento – impossível, mas inesquecível.
+Tua presença não ocupa espaço – ela o transforma.
+E talvez seja isso que mais me encanta:
+o fato de que não precisas fazer nada pra ser tudo.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide">
+    <div class="content">
+      <h1>Nos detalhes</h1>
+      <p>Sabe oque significa detalhe? É algo que você repara,seu olhar, seu ritmo, seu cabelo, seu olho, 
+        ou algum gesto que você faz sem perceber.. Pode ter certeza que eu reparo em tudo isso em você. 
+        Tudo sem esagero, sabe porque? Porque são esses detalhes que fazem você ser única para mim...
+
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide">
+    <div class="content">
+      <h1>Minha promessa</h1>
+      <p>Vou guardar seu coração como quem guarda o pôr do sol: com amor de tar enchergando algo tão... tão belo... tão grandioso e tão insubstituivel... minha promessa sera essa, guardar seu coração sem quebrar ele, sem magoar ele e se eu algum dia magoar ele pode ter certeza que eu vou implorar para reconstruir ele!!</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 - COM CORAÇÃO SECRETO -->
+  <div class="slide">
+    <div class="content">
+      <h1>Infinito</h1>
+      <p>Infinito.
+Os gregos chamavam de apeiron: o ilimitado, o que não tem começo nem fim.
+
+E eu te digo, Ana, teu sorriso é como o infinito: impossível de medir… e, se eu pudesse, passaria a vida inteira admirando.
+
+Amar-te é tocar o infinito em cada gesto, em cada olhar,
+sentir que algo maior nos envolve,
+que teu nome já habitava o universo muito antes de mim.. (aperta 22 vezes no coração pfvr!)</p>
+      <div class="interactive-heart" id="secretHeart">💜</div>
+      <div class="click-counter" id="clickCounter"></div>
+    </div>
+  </div>
+
+  <img src="https://i.imgur.com/oTxXoJu.png" alt="Hello Kitty" class="hello-kitty" draggable="false" />
+
+  <!-- BOTÕES DE NAVEGAÇÃO -->
+  <div class="controls">
+    <button id="prev">←</button>
+    <button id="next">→</button>
+  </div>
+
+  <!-- MODAL DA CARTA -->
+  <div class="letter-modal" id="letterModal">
+    <div class="letter-container">
+      <div class="close-letter" id="closeLetter">×</div>
+      <div class="letter-header">Minha Carta para Você 💜</div>
+      <div class="letter-content" id="letterContent">
+        Oii princesa,
+
+       Eu queria te dizer que eu realemnte te amo, amo muito mesmo e so pra voce ter uma noção, meu amor por voce e como o infinito, sem começo e sem fim, eu quero estar ao seu lado em todos os momentos, sejam eles bons ou ruins, eu quero ser sua alegria, seu amor, sua vida. Eu quero te fazer feliz todos os dias da minha vida, eu quero te ver sorrir, te ver feliz, te ver realizada. Eu quero ser o motivo do seu sorriso, eu quero ser o motivo da sua felicidade. Eu quero ser o homem que vai te amar para sempre, que vai te respeitar, que vai te cuidar, que vai te proteger. Eu quero ser a pessoa mais foda que ja pode abitar seu coeaçãozinho e o mais loko tambem.. Olha eu confesso que o inferno pra mim não são os outros, o inferno para mim é um mundo sem que eu tenha te conhecido...(sim, é uma cantada KAKAKAKAKA) eu sempre gostei de ver a lua sabia?? e eu algum dia queria te convidar pra ver ela comigo (da sua janela da em) so que eu tenho plena certeza que eu me perderia, pois acabaria olhando de mais para voce!. Ja ouviu aquele ditado (que a lua reflete seus sentimentos)? ent amor, se a lua refletisse meus sentimntos, o ceu inteiro brilharia so por voce... Acho que esses momentos com voce, ta me deixando aviadado, na onde que EU iria fazer isso para alguem?? na onde me explica. Voce tem sorte pprt, muita sorte, falando em sorte eu nao acredito muito voce sabe mais... se a sorte realmente existir nesse mundo, a minha foi te encontrar, porque desde então, ta sendo muita sorte. Vou terminar isso dizendo uma frase (eu que fiz ne) "Assim como Van Gogh via beleza no simples, eu vejo um mundo inteiro nos seus olhos", nao vou colocar ponto final nessa frase, porque ele representa o fim e sua beleza nao tem fim! e olha que voce e linda, so que nao e a unica coisa eu que eu reparo, se eu fosse te dizer em tudo que eu reparo, eu ficaria escrevendo pela eternidade inteira e mesmo assim, se eu morrese escrevendo, teria que pedir mais 7 vidas para poder terminar de escrever. eu queria ser uma esponja do mar, sabe porque? porque em media um brasileiro vive de 70-85 anos e uma esponja vive 1100 anos, se eu pudesse ter esse "poder" de viver 1100 anos, eu passaria 1099 epsando em voce e o restante (1 ano) eu passaria escrevendo sobre voce, para me lembrar cada dia que se passe, voce nao sai da minha cabeça. 
+      </div>
+    </div>
+  </div>
+
+  <!-- MÚSICA DE FUNDO -->
+  <audio id="backgroundMusic" loop>
+    <source src="essa-pequena.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- BOTÃO DE MÚSICA -->
+  <button class="music-toggle" id="musicToggle">
+    <span class="music-icon">🎵</span>
+  </button>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    let index = 0;
+
+    // Criar estrelas
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      starsContainer.appendChild(star);
+    }
+
+    // Corações flutuantes
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart-float';
+      heart.textContent = '💜';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.bottom = '-50px';
+      heart.style.animationDelay = Math.random() * 2 + 's';
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 4000);
+    }
+
+    setInterval(createHeart, 3000);
+
+    // Navegação entre slides
+    function showSlide(newIndex) {
+      slides[index].classList.remove('active');
+      dots[index].classList.remove('active');
+      index = newIndex;
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+    }
+
+    document.getElementById('next').addEventListener('click', () => {
+      showSlide((index + 1) % slides.length);
+    });
+
+    document.getElementById('prev').addEventListener('click', () => {
+      showSlide((index - 1 + slides.length) % slides.length);
+    });
+
+    // Suporte para teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        document.getElementById('next').click();
+      } else if (e.key === 'ArrowLeft') {
+        document.getElementById('prev').click();
+      }
+    });
+
+    // Suporte para swipe em mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) {
+        // Swipe left
+        document.getElementById('next').click();
+      }
+      if (touchEndX > touchStartX + 50) {
+        // Swipe right
+        document.getElementById('prev').click();
+      }
+    }
+
+    // Coração secreto interativo
+    let clickCount = 0;
+    const secretHeart = document.getElementById('secretHeart');
+    const clickCounter = document.getElementById('clickCounter');
+    const letterModal = document.getElementById('letterModal');
+    const closeLetter = document.getElementById('closeLetter');
+
+    secretHeart.addEventListener('click', () => {
+      clickCount++;
+      
+      // Feedback visual
+      secretHeart.style.transform = 'scale(1.3)';
+      setTimeout(() => {
+        secretHeart.style.transform = 'scale(1)';
+      }, 200);
+
+      // Mostrar contador após 5 cliques
+      if (clickCount >= 5 && clickCount < 22) {
+        clickCounter.textContent = `${clickCount}/22 ✨`;
+      }
+
+      // Abrir carta aos 22 cliques
+      if (clickCount === 22) {
+        clickCounter.textContent = '💜 Abrindo sua carta...';
+        setTimeout(() => {
+          letterModal.classList.add('show');
+          // Efeito confete
+          for (let i = 0; i < 30; i++) {
+            setTimeout(() => createHeart(), i * 100);
+          }
+        }, 500);
+      }
+    });
+
+    closeLetter.addEventListener('click', () => {
+      letterModal.classList.remove('show');
+    });
+
+    letterModal.addEventListener('click', (e) => {
+      if (e.target === letterModal) {
+        letterModal.classList.remove('show');
+      }
+    });
+
+    // CONTROLE DE MÚSICA
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    let isPlaying = false;
+
+    musicToggle.addEventListener('click', () => {
+      if (isPlaying) {
+        backgroundMusic.pause();
+        musicToggle.classList.remove('playing');
+        musicToggle.classList.add('paused');
+        isPlaying = false;
+      } else {
+        backgroundMusic.play().catch(error => {
+          console.log('Erro ao reproduzir música:', error);
+        });
+        musicToggle.classList.add('playing');
+        musicToggle.classList.remove('paused');
+        isPlaying = true;
+      }
+    });
+
+    // Tentar reproduzir automaticamente no primeiro toque
+    document.addEventListener('click', function initMusic() {
+      if (!isPlaying) {
+        backgroundMusic.play().then(() => {
+          musicToggle.classList.add('playing');
+          isPlaying = true;
+        }).catch(() => {
+          musicToggle.classList.add('paused');
+        });
+      }
+      document.removeEventListener('click', initMusic);
+    }, { once: true });
+
+    // Prevenir zoom no iOS
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
+  </script>
+</body>
+</html>
